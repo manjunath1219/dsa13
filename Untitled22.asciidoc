@@ -1,0 +1,856 @@
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 1**
+
+Given two linked list of the same size, the task is to create a new linked list using those linked lists. The condition is that the greater node among both linked list will be added to the new linked list.
+
+**Examples:**
+
+Input: list1 = 5->2->3->8
+list2 = 1->7->4->5
+Output: New list = 5->7->4->8
+
+Input:list1 = 2->8->9->3
+list2 = 5->3->6->4
+Output: New list = 5->8->9->4
+----
+
+
++*In[1]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def create_new_list(list1, list2):
+    resultHead = None
+    resultTail = None
+    ptr1 = list1
+    ptr2 = list2
+
+    while ptr1 is not None and ptr2 is not None:
+        if ptr1.data >= ptr2.data:
+            newNode = Node(ptr1.data)
+            ptr1 = ptr1.next
+        else:
+            newNode = Node(ptr2.data)
+            ptr2 = ptr2.next
+
+        if resultHead is None:
+            resultHead = newNode
+            resultTail = newNode
+        else:
+            resultTail.next = newNode
+            resultTail = newNode
+
+    if ptr1 is not None:
+        if resultTail is None:
+            resultHead = ptr1
+        else:
+            resultTail.next = ptr1
+
+    if ptr2 is not None:
+        if resultTail is None:
+            resultHead = ptr2
+        else:
+            resultTail.next = ptr2
+
+    return resultHead
+# Example 1
+# list1: 5->2->3->8
+# list2: 1->7->4->5
+list1 = Node(5)
+list1.next = Node(2)
+list1.next.next = Node(3)
+list1.next.next.next = Node(8)
+
+list2 = Node(1)
+list2.next = Node(7)
+list2.next.next = Node(4)
+list2.next.next.next = Node(5)
+
+newListHead = create_new_list(list1, list2)
+
+# Printing the new list
+current = newListHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[1]:*+
+----
+5 2 3 8 1 7 4 5 ----
+
+
++*In[3]:*+
+[source, ipython3]
+----
+# Example 2
+# list1: 2->8->9->3
+# list2: 5->3->6->4
+list1 = Node(2)
+list1.next = Node(8)
+list1.next.next = Node(9)
+list1.next.next.next = Node(3)
+
+list2 = Node(5)
+list2.next = Node(3)
+list2.next.next = Node(6)
+list2.next.next.next = Node(4)
+
+newListHead = create_new_list(list1, list2)
+
+# Printing the new list
+current = newListHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[3]:*+
+----
+5 3 6 4 2 8 9 3 ----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 2**
+
+Write a function that takes a list sorted in non-decreasing order and deletes any duplicate nodes from the list. The list should only be traversed once.
+
+For example if the linked list is 11->11->11->21->43->43->60 then removeDuplicates() should convert the list to 11->21->43->60.
+
+**Example 1:**
+
+```
+Input:
+LinkedList: 
+11->11->11->21->43->43->60
+Output:
+11->21->43->60
+```
+
+**Example 2:**
+
+Input:
+LinkedList: 
+10->12->12->25->25->25->34
+Output:
+10->12->25->34
+----
+
+
++*In[4]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def removeDuplicates(head):
+    if head is None:
+        return head
+
+    current = head
+    while current.next is not None:
+        if current.data == current.next.data:
+            current.next = current.next.next
+        else:
+            current = current.next
+
+    return head
+# Example 1
+# LinkedList: 11->11->11->21->43->43->60
+head = Node(11)
+head.next = Node(11)
+head.next.next = Node(11)
+head.next.next.next = Node(21)
+head.next.next.next.next = Node(43)
+head.next.next.next.next.next = Node(43)
+head.next.next.next.next.next.next = Node(60)
+
+newHead = removeDuplicates(head)
+
+# Printing the updated linked list
+current = newHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[4]:*+
+----
+11 21 43 60 ----
+
+
++*In[5]:*+
+[source, ipython3]
+----
+# Example 2
+# LinkedList: 10->12->12->25->25->25->34
+head = Node(10)
+head.next = Node(12)
+head.next.next = Node(12)
+head.next.next.next = Node(25)
+head.next.next.next.next = Node(25)
+head.next.next.next.next.next = Node(25)
+head.next.next.next.next.next.next = Node(34)
+
+newHead = removeDuplicates(head)
+
+# Printing the updated linked list
+current = newHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[5]:*+
+----
+10 12 25 34 ----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 3**
+
+Given a linked list of size **N**. The task is to reverse every **k** nodes (where k is an input to the function) in the linked list. If the number of nodes is not a multiple of *k* then left-out nodes, in the end, should be considered as a group and must be reversed (See Example 2 for clarification).
+
+**Example 1:**
+
+```
+Input:
+LinkedList: 1->2->2->4->5->6->7->8
+K = 4
+Output:4 2 2 1 8 7 6 5
+Explanation:
+The first 4 elements 1,2,2,4 are reversed first
+and then the next 4 elements 5,6,7,8. Hence, the
+resultant linked list is 4->2->2->1->8->7->6->5.
+
+```
+
+**Example 2:**
+
+Input:
+LinkedList: 1->2->3->4->5
+K = 3
+Output:3 2 1 5 4
+Explanation:
+The first 3 elements are 1,2,3 are reversed
+first and then elements 4,5 are reversed.Hence,
+the resultant linked list is 3->2->1->5->4.
+----
+
+
++*In[6]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def reverseKNodes(head, k):
+    if head is None:
+        return None
+
+    current = head
+    prev = None
+    next = None
+    count = 0
+
+    # Reverse the first k nodes
+    while current is not None and count < k:
+        next = current.next
+        current.next = prev
+        prev = current
+        current = next
+        count += 1
+
+    # Recursively reverse the remaining nodes
+    if next is not None:
+        head.next = reverseKNodes(next, k)
+
+    # Return the head of the reversed k nodes
+    return prev
+# Example 1
+# LinkedList: 1->2->2->4->5->6->7->8
+# K = 4
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(2)
+head.next.next.next = Node(4)
+head.next.next.next.next = Node(5)
+head.next.next.next.next.next = Node(6)
+head.next.next.next.next.next.next = Node(7)
+head.next.next.next.next.next.next.next = Node(8)
+
+newHead = reverseKNodes(head, 4)
+
+# Printing the reversed linked list
+current = newHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[6]:*+
+----
+4 2 2 1 8 7 6 5 ----
+
+
++*In[7]:*+
+[source, ipython3]
+----
+# Example 2
+# LinkedList: 1->2->3->4->5
+# K = 3
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(3)
+head.next.next.next = Node(4)
+head.next.next.next.next = Node(5)
+
+newHead = reverseKNodes(head, 3)
+
+# Printing the reversed linked list
+current = newHead
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[7]:*+
+----
+3 2 1 5 4 ----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 4**
+
+Given a linked list, write a function to reverse every alternate k nodes (where k is an input to the function) in an efficient way. Give the complexity of your algorithm.
+
+**Example:**
+
+Inputs:   1->2->3->4->5->6->7->8->9->NULL and k = 3
+Output:   3->2->1->4->5->6->9->8->7->NULL.
+
+
+----
+
+
++*In[8]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def reverseAlternateKNodes(head, k):
+    if head is None:
+        return None
+
+    current = head
+    prev = None
+    next = None
+    count = 0
+
+    # Reverse the first k nodes
+    while current is not None and count < k:
+        next = current.next
+        current.next = prev
+        prev = current
+        current = next
+        count += 1
+
+    # Connect the reversed k nodes with the remaining nodes
+    if head is not None:
+        head.next = current
+
+    # Skip the next k nodes
+    count = 0
+    while current is not None and count < k-1:
+        current = current.next
+        count += 1
+
+    # Recursively reverse the next k nodes
+    if current is not None:
+        current.next = reverseAlternateKNodes(current.next, k)
+
+    # Return the head of the modified linked list
+    return prev
+# Example
+# LinkedList: 1->2->3->4->5->6->7->8->9->NULL
+# k = 3
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(3)
+head.next.next.next = Node(4)
+head.next.next.next.next = Node(5)
+head.next.next.next.next.next = Node(6)
+head.next.next.next.next.next.next = Node(7)
+head.next.next.next.next.next.next.next = Node(8)
+head.next.next.next.next.next.next.next.next = Node(9)
+
+newHead = reverseAlternateKNodes(head, 3)
+
+# Printing the modified linked list
+current = newHead
+while current is not None:
+    print(current.data, end="->")
+    current = current.next
+print("NULL")
+----
+
+
++*Out[8]:*+
+----
+3->2->1->4->5->6->9->8->7->NULL
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 5**
+
+Given a linked list and a key to be deleted. Delete last occurrence of key from linked. The list may have duplicates.
+
+**Examples**:
+
+Input:   1->2->3->5->2->10, key = 2
+Output:  1->2->3->5->10
+----
+
+
++*In[9]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def deleteLastOccurrence(head, key):
+    if head is None:
+        return None
+
+    prev = None
+    last = None
+    current = head
+
+    # Traverse the linked list to find the last occurrence of the key
+    while current is not None:
+        if current.data == key:
+            last = current
+        current = current.next
+
+    # Key not found, return the original linked list
+    if last is None:
+        return head
+
+    # Key is the head of the linked list
+    if last == head:
+        head = head.next
+    else:
+        # Connect the previous node to the next node of the last occurrence
+        current = head
+        while current.next != last:
+            current = current.next
+        current.next = last.next
+
+    return head
+# Example
+# LinkedList: 1->2->3->5->2->10
+# Key: 2
+head = Node(1)
+head.next = Node(2)
+head.next.next = Node(3)
+head.next.next.next = Node(5)
+head.next.next.next.next = Node(2)
+head.next.next.next.next.next = Node(10)
+
+newHead = deleteLastOccurrence(head, 2)
+
+# Printing the modified linked list
+current = newHead
+while current is not None:
+    print(current.data, end="->")
+    current = current.next
+print("NULL")
+----
+
+
++*Out[9]:*+
+----
+1->2->3->5->10->NULL
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 6**
+
+Given two sorted linked lists consisting of **N** and **M** nodes respectively. The task is to merge both of the lists (in place) and return the head of the merged list.
+
+**Examples:**
+
+Input: a: 5->10->15, b: 2->3->20
+
+Output: 2->3->5->10->15->20
+
+Input: a: 1->1, b: 2->4
+
+Output: 1->1->2->4
+----
+
+
++*In[10]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def mergeSortedLists(a, b):
+    # Base cases
+    if a is None:
+        return b
+    if b is None:
+        return a
+
+    # Compare the values of the heads
+    if a.data <= b.data:
+        a.next = mergeSortedLists(a.next, b)
+        return a
+    else:
+        b.next = mergeSortedLists(a, b.next)
+        return b
+    # Example 1
+# LinkedList a: 5->10->15
+# LinkedList b: 2->3->20
+a = Node(5)
+a.next = Node(10)
+a.next.next = Node(15)
+
+b = Node(2)
+b.next = Node(3)
+b.next.next = Node(20)
+
+merged = mergeSortedLists(a, b)
+
+# Printing the merged linked list
+current = merged
+while current is not None:
+    print(current.data, end="->")
+    current = current.next
+print("NULL")
+----
+
+
++*Out[10]:*+
+----
+2->3->5->10->15->20->NULL
+----
+
+
++*In[11]:*+
+[source, ipython3]
+----
+# Example 2
+# LinkedList a: 1->1
+# LinkedList b: 2->4
+a = Node(1)
+a.next = Node(1)
+
+b = Node(2)
+b.next = Node(4)
+
+merged = mergeSortedLists(a, b)
+
+# Printing the merged linked list
+current = merged
+while current is not None:
+    print(current.data, end="->")
+    current = current.next
+print("NULL")
+----
+
+
++*Out[11]:*+
+----
+1->1->2->4->NULL
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 7**
+
+Given a **Doubly Linked List**, the task is to reverse the given Doubly Linked List.
+
+**Example:**
+
+Original Linked list 10 8 4 2
+Reversed Linked list 2 4 8 10
+----
+
+
++*In[12]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.prev = None
+        self.next = None
+
+def reverseDoublyLinkedList(head):
+    current = head
+    prev = None
+
+    while current is not None:
+        next_node = current.next
+        current.next = prev
+        current.prev = next_node
+        prev = current
+        current = next_node
+
+    # Update the head to the last node (current)
+    head = prev
+
+    return head
+# Original Linked list: 10 8 4 2
+head = Node(10)
+head.next = Node(8)
+head.next.prev = head
+head.next.next = Node(4)
+head.next.next.prev = head.next
+head.next.next.next = Node(2)
+head.next.next.next.prev = head.next.next
+
+reversed_head = reverseDoublyLinkedList(head)
+
+# Printing the reversed linked list
+current = reversed_head
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[12]:*+
+----
+2 4 8 10 ----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+💡 **Question 8**
+
+Given a doubly linked list and a position. The task is to delete a node from given position in a doubly linked list.
+
+**Example 1:**
+
+```
+Input:
+LinkedList = 1 <--> 3 <--> 4
+x = 3
+Output:1 3
+Explanation:After deleting the node at
+position 3 (position starts from 1),
+the linked list will be now as 1->3.
+
+```
+
+**Example 2:**
+
+Input:
+LinkedList = 1 <--> 5 <--> 2 <--> 9
+x = 1
+Output:5 2 9
+----
+
+
++*In[13]:*+
+[source, ipython3]
+----
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.prev = None
+        self.next = None
+
+def deleteNodeAtPosition(head, position):
+    # Case 1: Deleting the head node
+    if position == 1:
+        if head is None:
+            return None
+        new_head = head.next
+        if new_head is not None:
+            new_head.prev = None
+        return new_head
+
+    current = head
+    count = 1
+
+    # Traverse the list to reach the position
+    while current is not None and count < position:
+        current = current.next
+        count += 1
+
+    # If position is greater than the size of the list, return
+    if current is None:
+        return head
+
+    # Update the links of the previous and next nodes
+    current.prev.next = current.next
+    if current.next is not None:
+        current.next.prev = current.prev
+
+    # Delete the current node
+    current = None
+
+    return head
+# Example 1
+# LinkedList: 1 <--> 3 <--> 4
+head = Node(1)
+head.next = Node(3)
+head.next.prev = head
+head.next.next = Node(4)
+head.next.next.prev = head.next
+
+position = 3
+new_head = deleteNodeAtPosition(head, position)
+
+# Printing the updated linked list
+current = new_head
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[13]:*+
+----
+1 3 ----
+
+
++*In[14]:*+
+[source, ipython3]
+----
+# Example 2
+# LinkedList: 1 <--> 5 <--> 2 <--> 9
+head = Node(1)
+head.next = Node(5)
+head.next.prev = head
+head.next.next = Node(2)
+head.next.next.prev = head.next
+head.next.next.next = Node(9)
+head.next.next.next.prev = head.next.next
+
+position = 1
+new_head = deleteNodeAtPosition(head, position)
+
+# Printing the updated linked list
+current = new_head
+while current is not None:
+    print(current.data, end=" ")
+    current = current.next
+----
+
+
++*Out[14]:*+
+----
+5 2 9 ----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
